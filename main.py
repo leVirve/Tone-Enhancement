@@ -1,4 +1,5 @@
 import os
+import sys
 import glob
 
 import cv2
@@ -7,7 +8,7 @@ from photo import Photo, adjust_gamma, clach
 
 
 def main(method_name):
-    for file in glob.glob('input/*.jpg'):
+    for file in glob.glob('input/*'):
         photo = Photo(os.path.basename(file), scale=0.2)
 
         base, detail = photo.spilt_layers(method_name)
@@ -24,11 +25,11 @@ def main(method_name):
         output = base + detail * 1.5
         output = output.clip(0, 1) * 255
 
-        cv2.imshow('img', (photo.img * 255).astype('uint8'))
+        cv2.imshow('source', (photo.img * 255).astype('uint8'))
         cv2.imshow('output', output.astype('uint8'))
         cv2.waitKey()
         photo.save_img(output.astype('uint8'), method_name=method_name)
 
 
 if __name__ == '__main__':
-    main('L0')
+    main(sys.argv[1])
